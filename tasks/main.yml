@@ -1,0 +1,51 @@
+# Standards: 0.1
+---
+- name: Fact mattermost user
+  set_fact:
+    mattermost_user: "{{ mattermost_user | default(homebrew_user) | default(ansible_user_id) }}"
+  tags:
+    - mattermost
+
+- become: "{{ (mattermost_user != ansible_user_id) | bool }}"
+  become_user: "{{ mattermost_user }}"
+  block:
+    - name: Install required package
+      ignore_errors: True
+      homebrew_cask:
+        name: mattermost
+        greedy: True
+        options: appdir=/Applications
+        accept_external_apps: False
+        state: upgraded
+      tags:
+        - mattermost
+
+    - name: Remove quarantine flag
+      register: mattermost_quarantine
+      failed_when: mattermost_quarantine.rc != 0 and "No such xattr" not in mattermost_quarantine.stderr
+      changed_when: mattermost_quarantine.rc == 0
+      command: xattr -d com.apple.quarantine /Applications/Mattermost.app
+      tags:
+        - mattermost
+
+    - name: Install pidof package
+      homebrew:
+        name: pidof
+      tags:
+        - mattermost
+
+    - name: Check program running
+      register: mattermost_running
+      failed_when: False
+      changed_when: mattermost_running.stdout | length > 0 | bool
+      command: pidof Mattermost
+      tags:
+        - mattermost
+
+    - name: Fact program running
+      set_fact:
+        mattermost_started: "{{ mattermost_running.stdout_lines | length > 0 | bool }}"
+      tags:
+        - mattermost
+
+...
