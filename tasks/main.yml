@@ -28,23 +28,10 @@
       tags:
         - mattermost
 
-    - name: Install pidof package
-      homebrew:
-        name: pidof
-      tags:
-        - mattermost
-
-    - name: Check program running
-      register: mattermost_running
-      failed_when: False
-      changed_when: mattermost_running.stdout | length > 0 | bool
-      command: pidof Mattermost
-      tags:
-        - mattermost
-
-    - name: Fact program running
-      set_fact:
-        mattermost_started: "{{ mattermost_running.stdout_lines | length > 0 | bool }}"
+    - name: Start application
+      when: mattermost_started
+      changed_when: False
+      command: open -j /Applications/Mattermost.app
       tags:
         - mattermost
 
