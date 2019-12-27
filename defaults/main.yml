@@ -1,0 +1,10 @@
+# Standards: 0.1
+---
+# @var mattermost_user:description: User to run user-specific commands
+# @var mattermost_user:value: mattermost_user | default(homebrew_user) | default(ansible_user_id)
+# mattermost_user:
+
+# @var mattermost_started:description: Restart app if already running
+mattermost_started: True
+
+...
