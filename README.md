@@ -1,6 +1,6 @@
 # mattermost
 
-[![Build Status](https://cloud.drone.io/api/badges/machippie/mattermost/status.svg)](https://cloud.drone.io/machippie/google-chrome)
+[![Build Status](https://cloud.drone.io/api/badges/machippie/mattermost/status.svg)](https://cloud.drone.io/machippie/mattermost)
 
 Ansible role to configure mattermost.
 
