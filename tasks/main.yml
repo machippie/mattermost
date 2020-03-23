@@ -20,19 +20,12 @@
       tags:
         - mattermost
 
-    - name: Remove quarantine flag
-      register: mattermost_quarantine
-      failed_when: mattermost_quarantine.rc != 0 and "No such xattr" not in mattermost_quarantine.stderr
-      changed_when: mattermost_quarantine.rc == 0
-      command: xattr -d com.apple.quarantine /Applications/Mattermost.app
-      tags:
-        - mattermost
-
-    - name: Start application
-      when: mattermost_started
-      changed_when: False
-      command: open -j /Applications/Mattermost.app
-      tags:
-        - mattermost
+- name: Remove quarantine flag
+  register: mattermost_quarantine
+  failed_when: mattermost_quarantine.rc != 0 and "No such xattr" not in mattermost_quarantine.stderr
+  changed_when: mattermost_quarantine.rc == 0
+  command: xattr -d com.apple.quarantine /Applications/Mattermost.app
+  tags:
+    - mattermost
 
 ...
